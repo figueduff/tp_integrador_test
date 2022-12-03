@@ -48,6 +48,7 @@ function login() {
         />
         <button type="submit">Login</button>
       </form>
+      <br />
       <button type="button" onClick={loginGoogle}>
         Login Google
       </button>

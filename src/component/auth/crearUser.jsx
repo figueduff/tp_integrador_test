@@ -20,7 +20,7 @@ function crearUser() {
 
   return (
     <div>
-      Crear Usuario
+      Registrar Usuario
       <form onSubmit={crearUser}>
         <label htmlFor="email"></label>
         <input
@@ -36,7 +36,7 @@ function crearUser() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Crear</button>
+        <button type="submit">RegistrarUsuario</button>
       </form>
     </div>
   );
