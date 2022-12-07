@@ -1,7 +1,6 @@
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useState, useEffect } from "react";
 import { auth } from "../../firebase";
-import Swal from "sweetalert2";
 
 // estado del usuario
 function user() {
