@@ -7,6 +7,7 @@ import {
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import Swal from "sweetalert2";
+import user from "./user";
 
 function login() {
   const [email, setEmail] = useState('');
@@ -21,6 +22,9 @@ function login() {
         email,
         password
       );
+     if (!auth.currentUser.emailVerified){
+        Swal.fire("Por favor validar el email");
+      }
     } catch (error) {
       console.log(error);
       if (

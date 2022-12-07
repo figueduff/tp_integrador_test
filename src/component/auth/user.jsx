@@ -1,6 +1,7 @@
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useState, useEffect } from "react";
-import { auth} from "../../firebase";
+import { auth } from "../../firebase";
+import Swal from "sweetalert2";
 
 // estado del usuario
 function user() {
@@ -8,7 +9,11 @@ function user() {
 
   useEffect(() => {
     const logueado = onAuthStateChanged(auth, (user) => {
-      (user && user.emailVerified )? setAuthUser(user) : setAuthUser(null);
+      if (user && user.emailVerified) {
+        setAuthUser(user);
+      } else {
+        setAuthUser(null);
+      }
     });
     return () => {
       logueado();
