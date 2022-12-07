@@ -1,6 +1,6 @@
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useState, useEffect } from "react";
-import { auth } from "../../firebase";
+import { auth} from "../../firebase";
 
 // estado del usuario
 function user() {
@@ -8,19 +8,20 @@ function user() {
 
   useEffect(() => {
     const logueado = onAuthStateChanged(auth, (user) => {
-      user ? setAuthUser(user) : setAuthUser(null);
+      (user && user.emailVerified )? setAuthUser(user) : setAuthUser(null);
     });
     return () => {
       logueado();
     };
   }, []);
 
-  const desloguear = () => {
-    signOut(auth)
-      .then(() => {
-        console.log("deslogueado ok");
-      })
-      .catch((error) => alert(error.message));
+  const desloguear = async () => {
+    try {
+      await signOut(auth);
+      console.log("deslogueado ok");
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   return (

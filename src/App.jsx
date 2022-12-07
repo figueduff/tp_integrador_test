@@ -1,15 +1,17 @@
-import Login from './component/auth/login'
-import CrearUser from './component/auth/crearUser'
-import User from './component/auth/user'
+import Login from "./component/auth/login";
+import CrearUser from "./component/auth/crearUser";
+import User from "./component/auth/user";
+
 function App() {
- 
-  return (  
+  return (
     <div className="App">
-    <CrearUser/>
-    <Login/>
-    <User/>
+      <CrearUser />
+      <br />
+      <Login />
+      <br />
+      <User />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
