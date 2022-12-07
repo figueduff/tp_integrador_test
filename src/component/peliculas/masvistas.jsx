@@ -39,6 +39,7 @@ function masvistas() {
   return (
     <>
       <div>
+        <h1>Mas Populares</h1>
         {pelis.map((item) => (
           <img
             key={item.id}
