@@ -1,14 +1,16 @@
 import React from "react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { auth, db } from "../../firebase";
+import Swal from "sweetalert2";
+import MiLista from "./miLista";
 
 function masvistas() {
   const [pelis, setPelis] = useState([]);
   const [pagina, setPagina] = useState(1);
-  const peliSeleccionada = useRef();
   const key = "e4e0f9c7c990f3921d36b5095affbe99";
 
   // fetch de api mas vistas
-
   const datos = async (pagina) => {
     const response = await fetch(
       `https://api.themoviedb.org/3/movie/popular?api_key=${key}&language=es-ES&page=${pagina}`
@@ -27,28 +29,61 @@ function masvistas() {
     setPagina((prevstate) => prevstate + 1);
   };
 
-  //   pelicula seleccionada
-  //   function handleClick(e) {
-  //     const listOption = e.target.src;
-  //     console.log("levanto ", listOption);
-  //     setImg(listOption);
-  //     // setimg(llego);
-  //     // console.log("llego ", llego);
-  //   }
+  const verDetalle = (e) => {
+    let selDetalle = e.target.dataset.dato;
+    console.log("detalle:", selDetalle);
+  };
+
+  // agregar a lista en firebase
+  const agregarLista = async (e) => {
+    let id = e.target.dataset.id;
+    let poster_path = e.target.dataset.poster_path;
+    console.log("lista:", id, poster_path);
+    if (auth.currentUser) {
+      let uid = auth.currentUser.uid;
+      console.log(uid);
+      const docRef = doc(db, "usuarios", uid);
+      await updateDoc(docRef, {
+        lista: arrayUnion({
+          id,
+          poster_path,
+        }),
+      });
+    } else {
+      Swal.fire("Por favor loguear para guardar");
+    }
+  };
 
   return (
     <>
       <div>
-        <h1>Mas Populares</h1>
-        {pelis.map((item) => (
-          <img
-            key={item.id}
-            src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
-            alt=""
-          />
-        ))}
+        <br />
+        <h3>Mas Populares</h3>
+        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+          {pelis.map((item, index) => (
+            <div key={index} className="card">
+              <img
+                className="card-img-top"
+                src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+                data-dato={item.id}
+                onClick={verDetalle}
+                alt={item.original_title}
+              />
+              <button
+                type="button"
+                onClick={agregarLista}
+                data-id={item.id}
+                data-poster_path={item.poster_path}>
+                + lista
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
-      <button onClick={verMas} disabled={pagina > 15 ? true : false}>
+      <button
+        type="button"
+        onClick={verMas}
+        disabled={pagina > 15 ? true : false}>
         Ver más
       </button>
     </>

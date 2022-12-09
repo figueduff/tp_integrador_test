@@ -4,14 +4,13 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import Swal from "sweetalert2";
 
-
 function login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   // login con usuario en firebase
   const loginEmail = async (e) => {
@@ -22,7 +21,7 @@ function login() {
         email,
         password
       );
-     if (!auth.currentUser.emailVerified){
+      if (!auth.currentUser.emailVerified) {
         Swal.fire("Por favor validar el email");
       }
     } catch (error) {
@@ -43,20 +42,24 @@ function login() {
     const provider = new GoogleAuthProvider();
     try {
       const userCredential = await signInWithPopup(auth, provider);
-      console.log(userCredential);
+      // console.log(userCredential);
       const docRef = doc(db, "usuarios", auth.currentUser.uid);
       const data = {
         uid: auth.currentUser.uid,
         authProvider: "google",
         email: auth.currentUser.email,
       };
-      await setDoc(docRef, data);
+      try {
+        await updateDoc(docRef, data);
+      } catch (error) {
+        if (error.code === "not-found") {
+          await setDoc(docRef, data);
+        }
+      }
     } catch (error) {
       alert(error);
     }
   };
-
-
 
   return (
     <div>
@@ -66,6 +69,7 @@ function login() {
         <input
           type="text"
           placeholder="Ingrese email"
+          autoComplete="username"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -73,6 +77,7 @@ function login() {
         <label htmlFor="password"></label>
         <input
           type="password"
+          autoComplete="current-password"
           placeholder="Ingrese password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}

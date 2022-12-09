@@ -24,7 +24,7 @@ function crearUser() {
         password
       );
       const docRef = doc(db, "usuarios", auth.currentUser.uid);
-      const data = { uid: auth.currentUser.uid, authProvider: "local", email };
+      const data = { uid: auth.currentUser.uid, authProvider: "local", email};
       await setDoc(docRef, data).then(() => {
         sendEmailVerification(auth.currentUser);
         Swal.fire(
@@ -42,7 +42,7 @@ function crearUser() {
       }
     }
   };
-
+//  reset usuario
   const reset = async () => {
     const { value: email } = await Swal.fire({
       title: "Ingrese su email",
@@ -79,12 +79,14 @@ function crearUser() {
           type="text"
           placeholder="Ingrese email"
           ref={emailRef}
+          autoComplete="username"
           required
         />
         <label htmlFor="password"></label>
         <input
           type="password"
           placeholder="Ingrese password"
+          autoComplete="current-password"
           ref={passwordRef}
           required
         />

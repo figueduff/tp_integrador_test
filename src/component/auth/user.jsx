@@ -1,5 +1,5 @@
-import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useState, useEffect } from "react";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 
 // estado del usuario
