@@ -1,9 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { doc, updateDoc, arrayUnion } from "firebase/firestore";
-import { auth, db } from "../../firebase";
-import Swal from "sweetalert2";
-import MiLista from "./miLista";
+import BtAgregar from './btAgregarLista'
 
 function masvistas() {
   const [pelis, setPelis] = useState([]);
@@ -34,26 +31,6 @@ function masvistas() {
     console.log("detalle:", selDetalle);
   };
 
-  // agregar a lista en firebase
-  const agregarLista = async (e) => {
-    let id = e.target.dataset.id;
-    let poster_path = e.target.dataset.poster_path;
-    console.log("lista:", id, poster_path);
-    if (auth.currentUser) {
-      let uid = auth.currentUser.uid;
-      console.log(uid);
-      const docRef = doc(db, "usuarios", uid);
-      await updateDoc(docRef, {
-        lista: arrayUnion({
-          id,
-          poster_path,
-        }),
-      });
-    } else {
-      Swal.fire("Por favor loguear para guardar");
-    }
-  };
-
   return (
     <>
       <div>
@@ -69,13 +46,7 @@ function masvistas() {
                 onClick={verDetalle}
                 alt={item.original_title}
               />
-              <button
-                type="button"
-                onClick={agregarLista}
-                data-id={item.id}
-                data-poster_path={item.poster_path}>
-                + lista
-              </button>
+              <BtAgregar id={item.id} poster_path={item.poster_path}/>
             </div>
           ))}
         </div>

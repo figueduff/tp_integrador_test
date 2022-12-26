@@ -38,20 +38,18 @@ function miLista() {
   const eliminarDeLista = (e) => {
     let id = e.target.dataset.id;
     if (lista.length > 1) {
-      setLista((listaAnterior) =>
-        listaAnterior.filter((list) => list.id !== id)
-      );
       nuevaLista = lista.filter((list) => list.id !== id);
-      eliminarDeDB()
+      setLista(nuevaLista);
+      eliminarDeDB();
       console.log("nueva", nuevaLista);
+      console.log("lista", lista);
     } else {
       // : setLista(lista.shift)
       setLista([]);
       nuevaLista.shift;
-      eliminarDeDB()
+      eliminarDeDB();
       console.log("nueva vacia", nuevaLista);
     }
-    console.log(lista);
     // const auth = getAuth();
     // onAuthStateChanged(auth, (user) => {
     //   console.log(lista);
@@ -69,10 +67,10 @@ function miLista() {
     // });
   };
 
-
   // elimina de DB
   const eliminarDeDB = () => {
     const auth = getAuth();
+    console.log("llego a eliminar", lista);
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         const uid = user.uid;
@@ -90,7 +88,7 @@ function miLista() {
 
   useEffect(() => {
     traerLista();
-  }, [setLista]);
+  }, []);
 
   return (
     <div>
